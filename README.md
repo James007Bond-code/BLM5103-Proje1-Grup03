@@ -1,6 +1,7 @@
 # BIL545 Veri Madenciliğinde İleri Konular · Proje 1
 
 **Konu 9.7:** Hava kalitesi ve kirlilik epizotları: Pekin PM2.5 verisiyle kirlilik epizodu tespiti ve birliktelik analizi
+
 **Dönem:** 2026–2027 Güz · **Öğretim üyesi:** Dr. Selma Güzel · Üsküdar Üniversitesi, Fen Bilimleri Enstitüsü
 
 ---
@@ -42,7 +43,7 @@ Ayrıntılı katkı beyanı (kod, analiz, yorum, sunum hazırlığı) defterin s
 
 ## ▶️ Defterin çalıştırılması
 
-1. `proje1/Proje_1_Konu_9.ipynb` dosyasını Google Colab'da açın (**Dosya → Not defteri yükle** ya da GitHub sekmesi).
+1. `proje1/BIL545_Proje1_Beijing_PM25.ipynb` dosyasını Google Colab'da açın (**Dosya → Not defteri yükle** ya da GitHub sekmesi).
 2. **Çalışma zamanı → Tümünü çalıştır.** İlk hücre `mlxtend` paketini kurar, kütüphane sürümlerini yazdırır ve tohumu (`SEED = 42`) sabitler.
 3. Defter, Weka kontrolleri için `beijing_weka.arff` ve `beijing_apriori.arff` dosyalarını üretip indirir.
    - **Weka sınıflandırma:** Explorer → Classify → ZeroR ve J48, Cross-validation, Folds = 10
@@ -72,7 +73,7 @@ _(Defter çalıştırıldıktan sonra doldurulacak: baseline ve en iyi modelin F
 ```text
 ├── README.md                     # Grup, veri, çalıştırma, sonuç özeti, katkı
 ├── proje1/
-│   └── Proje_1_Konu_9.ipynb      # Kod, çıktılar ve bütün yazılı cevaplar
+│   └── BIL545_Proje1_Beijing_PM25.ipynb # Kod, çıktılar ve bütün yazılı cevaplar
 └── proje2/                       # Proje 2 teslimi
 ```
 
