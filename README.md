@@ -16,7 +16,7 @@
 
 ## 👥 Grup (4 kişi · temel kapsam + Ek paket 1)
 
-**Grup adı:** _(doldurun)_ · **İletişim sorumlusu:** _(doldurun)_
+**Grup adı:** Grup 03 · **İletişim sorumlusu:** Süleyman Balsak
 
 | Öğrenci adı soyadı | Öğrenci no | Sorumlu olduğu alt başlıklar (defterde ve sunumda) |
 | :--- | :--- | :--- |
@@ -43,7 +43,7 @@ Ayrıntılı katkı beyanı (kod, analiz, yorum, sunum hazırlığı) defterin s
 
 ## ▶️ Defterin çalıştırılması
 
-1. `proje1/BIL545_Proje1_Beijing_PM25.ipynb` dosyasını Google Colab'da açın (**Dosya → Not defteri yükle** ya da GitHub sekmesi).
+1. `BIL545_Proje1_Beijing_PM25_(1).ipynb` dosyasını Google Colab'da açın (**Dosya → Not defteri yükle** ya da GitHub sekmesi).
 2. **Çalışma zamanı → Tümünü çalıştır.** İlk hücre `mlxtend` paketini kurar, kütüphane sürümlerini yazdırır ve tohumu (`SEED = 42`) sabitler.
 3. Defter, Weka kontrolleri için `beijing_weka.arff` ve `beijing_apriori.arff` dosyalarını üretip indirir.
    - **Weka sınıflandırma:** Explorer → Classify → ZeroR ve J48, Cross-validation, Folds = 10
@@ -64,21 +64,40 @@ Ayrıntılı katkı beyanı (kod, analiz, yorum, sunum hazırlığı) defterin s
 
 ## 📌 Sonuç özeti
 
-_(Defter çalıştırıldıktan sonra doldurulacak: baseline ve en iyi modelin F1 ± std değeri, sızıntı deneyinin sonucu, karıştırılmış bölme ile zamansal bölme farkı, McNemar sonucu, öne çıkan birliktelik kuralları, Proje 2'ye aktarılan model.)_
+| Model (geliştirme verisi, 5 zamansal kat) | F1 (epizot) | Dengeli doğruluk |
+| :--- | :--- | :--- |
+| Baseline (Dummy) | 0,119 ± 0,238 | 0,500 ± 0,000 |
+| Lojistik regresyon | 0,668 ± 0,120 | – |
+| Karar ağacı | 0,677 ± 0,093 | 0,682 ± 0,038 |
+| k-NN | 0,637 ± 0,038 | 0,660 ± 0,031 |
+| **Rastgele orman** | **0,726 ± 0,049** | 0,723 ± 0,031 |
+| Gradyan artırma (HGB) | 0,705 ± 0,101 | 0,728 ± 0,048 |
+
+- **Zamansal sızıntı en büyük tuzak:** Aynı karar ağacı veriyi karıştıran 10 katlı CV'de (Weka J48 ile aynı protokol) %86 doğruluk veriyor, zamana göre bölmede %70. Aradaki 16 puan, komşu saatlerin eğitim ve teste dağılmasından gelen sızıntı. Bu yüzden bütün değerlendirme zamana göre yapıldı. Rastgele ormanın OOB hatası da aynı nedenle test hatasından 6 puan iyimser.
+- **Ön işleme sızıntısı bu veride küçük:** Bütün veride ölçekleme ile Pipeline arasındaki fark 0,006 F1 (std ≈ 0,11).
+- **Optimist yanlılık:** GridSearchCV `best_score_` 0,669; iç içe CV 0,648.
+- **McNemar (2014 test dönemi):** Gradyan artırma rastgele ormandan anlamlı biçimde daha iyi (F1 0,785 vs 0,753, p < 0,0001); CV'de iki model ayırt edilemiyordu.
+- **Belirleyici koşullar:** Çiy noktası, rüzgâr hızı, sıcaklık ve rüzgâr yönü. Kuzeybatı rüzgârında epizot oranı %26–32, güneydoğu ve durgun rüzgârda %55–68. En güçlü kural: {donma altı sıcaklık, orta çiy noktası} → epizot (güven 0,84); en dengeli kural: {durgun rüzgâr} → epizot (Kulczynski 0,60).
+- **Weka kontrolü:** ZeroR (%51,5), J48 (%86,1) ve Apriori (59 kural, kayıt sayıları birebir aynı) Python ile tutarlı.
+- **Proje 2'ye aktarılan model:** Rastgele orman (100 ağaç, max_depth = 10), dokunulmayan 2014 test dönemi ve `TimeSeriesSplit(5, gap=24)` protokolüyle.
 
 ---
 
 ## 📁 Dizin yapısı
 
 ```text
-├── README.md                     # Grup, veri, çalıştırma, sonuç özeti, katkı
-├── proje1/
-│   └── BIL545_Proje1_Beijing_PM25.ipynb # Kod, çıktılar ve bütün yazılı cevaplar
-└── proje2/                       # Proje 2 teslimi
+├── README.md                                # Grup, veri, çalıştırma, sonuç özeti, yapay zekâ beyanı
+└── BIL545_Proje1_Beijing_PM25_(1).ipynb     # Kod, çıktılar ve bütün yazılı cevaplar (Proje 1)
 ```
 
 ---
 
 ## 🤖 Yapay zekâ beyanı
 
-_(Hangi araç, hangi aşamada ve ne için kullanıldı. Ayrıntısı defterdeki Yapay zekâ beyanı bölümünde.)_
+Bu projede **Google Gemini** ve **Claude** büyük dil modelleri, yardımcı araştırma ve teknik geliştirme asistanı olarak kullanılmıştır. Yapay zekâ araçlarından;
+
+* Python (`scikit-learn`, `mlxtend`, `matplotlib`) kod bloklarının yapılandırılması, hata ayıklanması ve Google Colab bellek/performans optimizasyonlarının yapılması,
+* Veri sızıntısı (data leakage) protokolleri, zaman serisi doğrulaması (`TimeSeriesSplit`) ve istatistiksel testlerin (McNemar) yönerge şartlarına uygunluğunun denetlenmesi,
+* Yorum metinlerinin taslaklarının hazırlanması ile rapor ve `README.md` dokümantasyonunun akademik dil ve Markdown biçimlendirmesi açısından düzenlenmesi aşamalarında yararlanılmıştır.
+
+Veri setinin analizi, deneylerin çalıştırılması ve Weka bağımsız doğrulamalarının gerçekleştirilmesi doğrudan grup üyeleri tarafından yapılmış olup, üretilen tüm kod ve metin çıktıları grup üyelerince kontrol edilerek doğrulanmıştır.
